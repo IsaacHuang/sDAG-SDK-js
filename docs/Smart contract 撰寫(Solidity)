@@ -1,0 +1,82 @@
+參數要包含型別
+如果 function 有 return 值的話，要在 returns 後面接上 function 回傳值的型別與參數名稱。
+
+存取範圍
+    external : 只可以給外面的 contract 使用，不可內部使用
+    public : 任何地方都可呼叫，預設均為 public
+    private : 只有相同 contract 才可使用
+    internal : 跟 private 類似，但如果是繼承該 contract 的 contract 也可以使用。
+
+Modifier
+    如果有共用的邏輯，可以用 modifier 讓許多 functioin 共用
+    _; 的意思為擁有這個 modifier 的 function 會先執行完寫在 modifier _; 之前的東西，之後才會繼續其本身 function 執行。
+
+Event 
+   可以在特定事件發生時產生 log，用來通知外界
+   通常用大寫命名
+
+型別
+  Address : 為 20 byte ，通常用來存放讀取之 Ethereum address ，具有如下方法可以使用。
+                   balance、transfer
+                   balance 可以取得地址的餘額
+                   transfer 可以傳送金額到該地址
+                   單位均為 wei
+  msg.sender : 預設為執行合約 Function 人的地址
+  call : 呼叫特定合約的 Function，可以加入要提供的 Gas 以及 Ether，基於安全考量，已不建議此作法。
+
+Key-Value
+  使用 mapping 可產生一個類似 Key-Value 對應的結構
+
+Struct
+Enum
+Array
+Boolean
+Integer : 包含 sign/unsign ( int/uint ) ，範圍從 8 到 256，如 uint8，uint16 .... uint256。目前 Ethereum 尚未支援浮點運算。
+
+內建全域變數
+1. 幣別單位
+       Solidity 可以使用以下單位進行金額判斷
+            wei、finney、szabo、ether
+            可以直接在合約中使用
+
+2. 時間單位
+        Solidity 可以使用以下時間單位來進行時間判斷
+            seconds、minutes、hours、days、weeks、years
+
+3. 區塊鏈相關資訊
+        msg 來源可以是合約或是用戶，如果一個合約被另一個合約調用，則 msg 會指向調用該合約的原始合約。
+
+錯誤處理
+
+    為了避免 EVM 在執行時發生錯誤直接消耗掉所有提供的 Gas，以及一些不可預料的情況導致合約產生 Bug，我們會使用以下方式來處理條件內容。
+
+assert(bool condition)
+如果情況錯誤則拋出錯誤，通常用於判斷內部邏輯錯誤。
+
+require(bool condition)
+如果情況錯誤則拋出錯誤，通常用於判斷使用者輸入之參數，或是外部合約回傳過來的值。
+
+revert()
+用來主動拋出錯誤，並回復狀態。
+
+assert() 拋錯時會消耗使用的 Gas，但 require() 與 revert() 會退還 Gas。
+
+繼承
+1. 使用 is 繼承之前寫得 contract
+    繼承的 contract 可以存取所有被繼承的 contract 的東西 ( 不包含 private )
+
+虛擬合約
+    類似於繼承，不過在原先 contract 中不會實作邏輯內容，直到被繼承後，才會於繼承的合約上實作。
+
+介面
+    類似於虛擬合約，但其強制不可以於被繼承的合約實作任何邏輯，到了繼承其合約的主合約才可實行。
+
+Payable
+    只有包含 payable 的 function 才可以接受 Ether
+
+View、Pure、Constant
+
+    View : 可讀取，但不可修改
+    Pure : 不可讀取，不可修改，只能對其傳入的參數做動作，類似於 Function Programing 中的 Pure Function 概念。
+    Constant : 可讀取，但不可修改，不會加在 function 上，只加在變數上。
+
